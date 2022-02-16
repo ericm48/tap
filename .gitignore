@@ -52,6 +52,9 @@ local.properties
 .settings/
 .loadpath
 
+## Enviro File
+.env
+
 ##############
 ## UltraEdit    
 ##############
