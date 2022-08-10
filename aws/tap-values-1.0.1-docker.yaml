@@ -1,0 +1,61 @@
+---
+#
+# tap-values: 18-Feb-2022 For AWS tap in dev1 namespace
+#
+# --name eks-eric-tap-cluster01 --region us-west-1 
+#
+profile: full
+ceip_policy_disclosed: true # The value must be true for installation to succeed
+buildservice:
+  kp_default_repository: "index.docker.io/ericm24/tap-tbs" #"index.docker.io/ericm24/build-service" #"index.docker.io/ericm24/tap-tbs"
+  kp_default_repository_username: "user"
+  kp_default_repository_password: "pass"
+
+  tanzunet_username: "user"
+  tanzunet_password: "pass"
+  descriptor_name: "full" #"tap-1.0.0-full"
+  enable_automatic_dependency_updates: true
+supply_chain: basic
+
+cnrs:
+  domain_name: apps.tap.ericm48.net
+
+ootb_supply_chain_basic:
+  registry:
+    server: "index.docker.io" #"azecreric1.azurecr.io"
+    repository: "ericm24" #"tap"
+  gitops:
+    ssh_secret: ""
+
+learningcenter:
+  ingressDomain: "learningcenter.tap.ericm48.net"
+
+tap_gui:
+  service_type: ClusterIP
+  ingressEnabled: "true"
+  ingressDomain: "tap.ericm48.net"
+  app_config:
+    app:
+      baseUrl: http://tap-gui.tap.ericm48.net
+    catalog:
+      locations:
+        - type: url
+          target: https://github.com/ericm48/tap/blob/master/yelb/catalog-info.yaml #https://github.com/ericm48/tap-1.0.1/blob/master/blank/catalog-info.yaml
+    backend:
+      baseUrl: http://tap-gui.tap.ericm48.net
+      cors:
+        origin: http://tap-gui.tap.ericm48.net
+
+metadata_store:
+  app_service_type: LoadBalancer # (optional) Defaults to LoadBalancer. Change to NodePort for distributions that don't support LoadBalancer
+
+grype:
+  namespace: "default" # (optional) Defaults to default namespace.
+  targetImagePullSecret: "tap-registry"
+
+contour:
+  infrastructure_provider: aws
+  envoy:
+    service:
+      aws:
+        LBType: nlb
